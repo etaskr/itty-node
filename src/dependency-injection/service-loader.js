@@ -1,5 +1,5 @@
 class ServiceLoader {
-    constructor(container, services, logger) {
+    constructor(container, services = [], logger) {
         this._services = services;
         this._container = container;
         this._logger = logger;
@@ -13,21 +13,19 @@ class ServiceLoader {
     registerServices() {
         if (!!this._services) {
             const services = this._services;
-            for (const key in services) {
-                if (!!key) {
-                    const module = services[key];
-                    if (!!module.class) {
-                        this._registerClassService(key, module);
-                        continue;
-                    }
 
-                    if (!!module.factory) {
-                        this._registerFactory(key, module);
-                        continue;
-                    }
-
-                    this._registerProvider(key, module);
+            for (const [key, module] of Object.entries(services)) {
+                if (!!module.class) {
+                    this._registerClassService(key, module);
+                    continue;
                 }
+
+                if (!!module.factory) {
+                    this._registerFactory(key, module);
+                    continue;
+                }
+
+                this._registerProvider(key, module);
             }
         } else {
             this._logger.info('No services registered');

@@ -1,13 +1,12 @@
-import ittyNode from './bootstrap';
-import MiddlewareInterface from './middleware/MiddlewareInterface';
-import ExceptionInterfaceType from './exception/ExceptionInterfaceType';
+import { createInstance, IttyNode } from './itty-node';
+import MiddlewareInterface from './middleware/middleware-interface';
+import ExceptionInterfaceType from './exception/exception-interface-type';
 
-export default {
-    ittyNode,
-};
+export default createInstance;
 
 export {
-    ittyNode,
+    createInstance,
+    IttyNode,
     MiddlewareInterface,
     ExceptionInterfaceType,
 };

@@ -1,0 +1,18 @@
+imports:
+  - {resource: '/routes.yml'}
+  - {resource: '/services.yml'}
+
+server:
+  port: 3999
+
+session:
+  secret: 'keyboard cat'
+  resave: true
+  saveUninitialized: true
+
+theme:
+  template_engine: hbs
+  baseDir: 'src/views'
+  extname: '.hbs'
+  hbs:
+    layoutsDir: 'src/views'

@@ -1,0 +1,6 @@
+--require babel-register
+--require babel-polyfill
+--reporter spec
+--ui bdd
+--recursive
+--timeout 1000

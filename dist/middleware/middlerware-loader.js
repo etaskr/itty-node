@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8,27 +8,47 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var RouteLoader = function () {
-    function RouteLoader(container, logger) {
-        _classCallCheck(this, RouteLoader);
+var MiddlewareLoader = function () {
+    /**
+     * @param container
+     * @param logger
+     */
+    function MiddlewareLoader(container, logger) {
+        _classCallCheck(this, MiddlewareLoader);
 
         this._container = container;
         this._logger = logger;
     }
 
-    _createClass(RouteLoader, [{
-        key: "register",
-        value: function register(server, route) {
-            if (route.methods.length > 1) {
+    /**
+     * @param {Array.<String>} middlewareStack
+     * @return {Array.<MiddlewareInterface>}
+     */
+
+
+    _createClass(MiddlewareLoader, [{
+        key: 'getMiddlewareStack',
+        value: function getMiddlewareStack() {
+            var middlewareStack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+            this._logger.info('Loading middleware from service container into a middleware stack');
+            var middlewareInstancesStack = [];
+
+            if (!!middlewareStack) {
                 var _iteratorNormalCompletion = true;
                 var _didIteratorError = false;
                 var _iteratorError = undefined;
 
                 try {
-                    for (var _iterator = route.methods[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var method = _step.value;
+                    for (var _iterator = middlewareStack[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var middleware = _step.value;
 
-                        this._attachRoute(server, method, route.path, route.controller, route.action);
+                        try {
+                            var middlewareInstance = this._container.get(middleware);
+                            middlewareInstancesStack.push(middlewareInstance);
+                        } catch (err) {
+                            this._logger.error('Failed to load middleware ' + middleware, err);
+                        }
                     }
                 } catch (err) {
                     _didIteratorError = true;
@@ -44,26 +64,12 @@ var RouteLoader = function () {
                         }
                     }
                 }
-
-                return;
             }
-
-            this._attachRoute(server, route.methods[0], route.path, route.controller, route.action);
-        }
-    }, {
-        key: "_attachRoute",
-        value: function _attachRoute(server, method, path, service, action) {
-            var _this = this;
-
-            this._logger.info("Route applied: " + method.toUpperCase() + " [" + path + "] " + service + "::" + action);
-            server[method](path, function (req, res) {
-                var controller = _this._container.get(service);
-                controller[action](req, res);
-            });
+            return middlewareInstancesStack;
         }
     }]);
 
-    return RouteLoader;
+    return MiddlewareLoader;
 }();
 
-exports.default = RouteLoader;
+exports.default = MiddlewareLoader;

@@ -1,0 +1,6 @@
+services:
+  homeController:
+    class: 'controllers/home-controller'
+
+  poweredByMiddleware:
+      class: 'middleware/powered-by-middleware'

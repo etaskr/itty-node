@@ -1,0 +1,6 @@
+routes:
+  home:
+    path: '/'
+    controller: homeController
+    action: index
+    methods: [get]

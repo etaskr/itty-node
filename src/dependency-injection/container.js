@@ -106,7 +106,7 @@ class Container {
 
         moduleRegistry.deps.forEach((dep) => {
             if (dep === moduleRegistry.name) {
-                throw new Error(`Module ${dep} can\'t depend on itself`);
+                throw new Error(`Module ${dep} can't depend on itself`);
             }
             res.push(self.getArgs(dep));
         });
@@ -163,8 +163,12 @@ class Container {
 
     stop(moduleName) {
         const mod = this._modules[moduleName];
-        if (!mod) { return; }
-        if (!mod.instance || !mod.started) { return; }
+        if (!mod) {
+            return;
+        }
+        if (!mod.instance || !mod.started) {
+            return;
+        }
         if (typeof (mod.instance.stop) === 'function') {
             mod.instance.stop();
         }
@@ -193,7 +197,11 @@ class Container {
         const moduleKeys = Object.keys(this._modules);
         moduleKeys.forEach((key) => {
             const reg = this._modules[key];
-            this._logger.debug(reg.name, 'instance: ', reg.instance !== undefined ? 'Yes' : 'No', 'factory:', reg.factory !== undefined ? 'Yes' : 'No');
+            this._logger.debug(reg.name,
+                'instance: ',
+                reg.instance !== undefined ? 'Yes' : 'No',
+                'factory:',
+                reg.factory !== undefined ? 'Yes' : 'No');
         }, this);
         this._logger.debug('** Container finished **');
     }

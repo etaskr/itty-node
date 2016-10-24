@@ -1,4 +1,4 @@
-import ExceptionInterfaceType from '../exception/ExceptionInterfaceType';
+import ExceptionInterfaceType from '../exception/exception-interface-type';
 
 class MiddlewareInterface {
     constructor() {
